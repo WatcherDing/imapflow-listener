@@ -64,12 +64,24 @@ const connect = async () => {
     let lock = await client.getMailboxLock('INBOX');
     try {
         client.on('mail', async () => {
-            let message = await client.fetchOne(client.mailbox.exists, { source: true, headers: true });
-            const raw = message.source.toString();
-            const subject = message.headers.get('subject')?.[0] || '';
-            const from = message.headers.get('from')?.value[0]?.address || '';
+            console.log('New mail event triggered. Searching for unseen messages...');
+            const unseenMessages = await client.search({ unseen: true });
+            if (unseenMessages.length === 0) {
+                console.log('No unseen messages found.');
+                return;
+            }
 
-            sendWebhook({ subject, from, raw });
+            console.log(`Found ${unseenMessages.length} unseen message(s). Fetching...`);
+            for await (let message of client.fetch(unseenMessages, { source: true, headers: true })) {
+                const raw = message.source.toString();
+                const subject = message.headers.get('subject')?.[0] || '';
+                const from = message.headers.get('from')?.value[0]?.address || '';
+
+                sendWebhook({ subject, from, raw });
+            }
+
+            // If you want to mark messages as read after processing, uncomment the following line:
+            // await client.messageFlagsAdd(unseenMessages, ['\\Seen']);
         });
 
         await client.idle();
