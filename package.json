@@ -1,0 +1,25 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WatcherDing/imapflow-listener.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/WatcherDing/imapflow-listener/issues"
+  },
+  "homepage": "https://github.com/WatcherDing/imapflow-listener#readme",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "imapflow": "^1.1.1"
+  }
+}
